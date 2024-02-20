@@ -1,6 +1,10 @@
 # 设置基础镜像: tomcat
 FROM tomcat:8.5.98-jdk8
 
+# 设置容器时间
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
+
 #移除tomcat内置应用程序
 RUN rm -rf /usr/local/tomcat/webapps/
 
