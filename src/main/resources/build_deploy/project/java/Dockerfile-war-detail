@@ -18,3 +18,15 @@ RUN rm -rf $CATALINA_HOME/webapps/
 
 # 启动Tomcat服务器
 CMD ["catalina.sh", "run"]
+
+#在Docker容器中推荐使用catalina.sh run来启动Tomcat的原因与Docker容器的日志处理和交互方式有关。以下是使用run模式在Docker中的一些优势：
+#1. 日志管理
+#当使用catalina.sh run时，Tomcat的日志输出会直接打印到控制台（即标准输出和标准错误）。这与Docker的日志处理方式紧密结合，因为Docker默认会捕获容器的标准输出和标准错误，并使其通过docker logs命令等工具可用。
+#这种方式使得管理和监控容器化应用的日志变得更加方便，因为你可以使用Docker的原生日志命令来查看日志，而不需要进入容器内部或查看外部日志文件。
+#2. 前台运行
+#Docker容器设计为运行单一主进程，且通常推荐该进程在前台运行。这样做可以让Docker直接管理和监控该进程，一旦主进程终止，容器也会随之停止。
+#使用catalina.sh run可以确保Tomcat服务器作为前台进程运行，与Docker的这一设计理念相吻合。相反，使用start模式会使Tomcat在后台作为守护进程运行，这与Docker容器运行单一前台进程的最佳实践相违背。
+#3. 信号处理
+#当Tomcat以前台模式运行时（通过catalina.sh run），它可以更好地响应来自Docker的停止请求（如docker stop命令）。Docker发送的SIGTERM信号会被Tomcat捕获，允许它优雅地关闭，包括完成当前请求和正确关闭连接。
+#相比之下，如果Tomcat作为后台进程运行（使用start），则可能需要额外的配置或脚本来确保它能够正确响应停止信号。
+#综上所述，catalina.sh run是在Docker容器中运行Tomcat的推荐方式，因为它更符合Docker的日志管理、进程管理和信号处理的最佳实践
