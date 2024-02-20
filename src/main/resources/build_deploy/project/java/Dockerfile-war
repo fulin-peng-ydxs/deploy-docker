@@ -1,0 +1,9 @@
+# 设置基础镜像: tomcat
+FROM tomcat:8.5.98-jdk8
+
+#移除tomcat内置应用程序
+RUN rm -rf /usr/local/tomcat/webapps/
+
+# 上传war
+ARG WAR_FILE
+ADD ${WAR_FILE} /usr/local/tomcat/webapps/

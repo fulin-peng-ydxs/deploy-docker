@@ -1,0 +1,144 @@
+version: '3.3'
+
+#服务定义
+services:
+  sysapi:
+    image: "reg.int.it2000.com.cn/com.gzzn.gxts/sys-api:latest"
+    working_dir: /usr/local/myapp
+    volumes:
+     - /etc/localtime:/etc/localtime
+    entrypoint: ["java","-XX:PermSize=64m","-XX:MaxPermSize=128m", "-Xms256m", "-Xmx1024m","-Dspring.profiles.active=dev","-jar","/usr/local/myapp/myapp.jar"]
+    networks: 
+     - gxtsnw
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure		
+
+  gxtsweb:
+    image: "reg.int.it2000.com.cn/com.gzzn.gxts/gxtsweb:latest"
+    networks:
+     - gxtsnw
+    volumes:
+      - /etc/localtime:/etc/localtime
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  gateway:
+    image: "reg.int.it2000.com.cn/com.gzzn.gxts/gateway-api:latest"
+    working_dir: /usr/local/myapp
+    volumes:
+      - /etc/localtime:/etc/localtime
+    entrypoint: ["java","-XX:PermSize=64m","-XX:MaxPermSize=128m", "-Xms256m", "-Xmx1024m","-Dspring.profiles.active=test","-jar","/usr/local/myapp/myapp.jar"]
+    networks:
+     - gxtsnw
+    ports:
+     - "81:8080"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+#  taskapi:
+#    image: "reg.int.it2000.com.cn/com.gzzn.gxts/flowable-task:test-1"
+#    working_dir: /usr/local/myapp
+#    volumes:
+#      - /etc/localtime:/etc/localtime
+#    environment:
+#     JAVA_OPTS: "-XX:PermSize=64m -XX:MaxPermSize=128m -Xms256m -Xmx1024m -Dspring.profiles.active=uat -Dapp.dataCenter.appHost=http://10.201.38.217:18110"
+#     SPRING_PROFILES_ACTIVE: "uat"
+#     APP_DATACENTER_APPHOST: "http://10.201.38.217:18110"
+#    networks:
+#     - gxtsnw
+#    ports:
+#     - "84:8080"
+#    deploy:
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+
+#  gxts-portal:
+#    image: "reg.int.it2000.com.cn/com.aifa.mins/gxts-portal/2.0.0-snapshot:prod-194"
+#    working_dir: /usr/local
+#    volumes:
+#      - /etc/localtime:/etc/localtime
+#    environment:
+#     JAVA_OPTS: "-XX:PermSize=64m -XX:MaxPermSize=128m -Xms256m -Xmx1024m -Dspring.profiles.active=uat"
+#     SPRING_PROFILES_ACTIVE: "uat"
+#    networks:
+#     - gxtsnw
+#    ports:
+#     - "87:8080"
+#    deploy:
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+
+#  modeler:
+#    image: "reg.int.it2000.com.cn/com.gzzn.gxts/flowable-modeler:1.1.1-SNAPSHOT"
+#    networks:
+#     - gxtsnw
+#    ports:
+#     - "83:8080"
+#    deploy:
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+
+#  gxts-portal-old:
+#    image: "reg.int.it2000.com.cn/com.aifa.mins/gxts-portal-old/2.0.0-snapshot:prod-41"
+#    working_dir: /usr/local
+#    environment:
+#     JAVA_OPTS: "-XX:PermSize=64m -XX:MaxPermSize=128m -Xms256m -Xmx512m"
+#     SPRING_PROFILES_ACTIVE: "uat"
+#    networks:
+#     - gxtsnw
+#    ports:
+#     - "88:8080"
+#    deploy:
+#     replicas: 1
+#     restart_policy:
+#      condition: on-failure
+
+#  gxtsweb-old:
+#    image: "reg.int.it2000.com.cn/com.gzzn.gxts/gxtsweb-old:test-2"
+#    networks:
+#     - gxtsnw
+#    ports:
+#     - "89:80"
+#    deploy:
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+#  msg:
+#    image: "reg.int.it2000.com.cn/com.aifa.mins/msg-site/2.5.3-snapshot:latest"
+#    environment:
+#     JAVA_OPTS: "-XX:PermSize=64m -XX:MaxPermSize=128m -Xms256m -Xmx512m"
+#     SPRING_PROFILES_ACTIVE: "uat"
+#    networks:
+#     - gxtsnw
+#    deploy:
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+
+#  msg-cim:
+#    image: "reg.int.it2000.com.cn/com.aifa.mins/msg-cim/1.0.0-snapshot:latest"
+#    networks:
+#     - gxtsnw
+#    ports:
+#     - "90:8080"
+#     - "34567:34567"
+#    deploy:
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+
+#网络定义
+networks:
+  gxtsnw:
+    ipam:
+      config:
+        - subnet: 132.39.0.0/16
