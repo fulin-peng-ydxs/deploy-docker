@@ -10,6 +10,10 @@ git_branch=${1:-master}
 echo "=========拉取新构建源:${git_branch}-${git_url}==========="
 git clone -b "${git_branch}" $git_url
 
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
 #执行构建
 cd "${build_path}" || exit
 groupId=$(awk -F'[<>]' '/<groupId>/ {print $3; exit}' pom.xml)
@@ -18,6 +22,10 @@ version=$(awk -F'[<>]' '/<version>/ {print $3; exit}' pom.xml)
 jar_file=target/${artifactId}-${version}.jar
 echo "=========jar构建:${jar_file}==========="
 mvn clean package spring-boot:repackage -Dmaven.test.skip=true
+
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
 #构建镜像
 image_repository=${2:-reg.int.it2000.com.cn}
@@ -32,9 +40,16 @@ image_name=${image_repository}/${groupId}/${artifactId}:${image_version}
 echo "=========镜像构建:${image_name}==========="
 docker build  --build-arg JAR_FILE="${jar_file}"  -t "${image_name}" .
 
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 #推送镜像
 echo "=========推送镜像:${image_repository}=========="
 docker push "${image_name}"
+
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
 #更新服务
 service_name=${3:-${groupId}_${artifactId}}
