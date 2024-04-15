@@ -2,9 +2,11 @@
 
 git_url=${5:-git@gitlab.int.it2000.com.cn:gxts/flowable-task.git}
 build_root=$(dirname "$(readlink -f "$0")")
+cd "${build_root}" || exit
 build_path=${build_root}/$( echo $git_url | awk -F '/' '{print $NF}' | awk -F '.' '{print $1}')
 echo "=========删除旧构建源:${build_path}==========="
 rm -rf "${build_path}"
+
 #拉取仓库
 git_branch=${1:-master}
 echo "=========拉取新构建源:${git_branch}-${git_url}==========="
