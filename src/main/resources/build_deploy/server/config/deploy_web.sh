@@ -16,7 +16,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-#指定构建
+#执行构建
 cd "${build_path}" || exit
 echo "=========构建web==========="
 npm install
