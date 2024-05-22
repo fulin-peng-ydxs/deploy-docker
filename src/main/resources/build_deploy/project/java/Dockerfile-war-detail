@@ -1,7 +1,7 @@
 FROM openjdk:11
 
 # 设置Tomcat版本
-ENV TOMCAT_VERSION 9.0.62
+ENV TOMCAT_VERSION 9.0.89
 
 # 下载并解压Tomcat到/usr/local目录下
 RUN wget https://downloads.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz \
@@ -15,6 +15,10 @@ ENV PATH $CATALINA_HOME/bin:$PATH
 
 # 删除不必要的应用和示例
 RUN rm -rf $CATALINA_HOME/webapps/
+
+# 上传war
+ARG WAR_FILE
+ADD ${WAR_FILE} $CATALINA_HOME/webapps/
 
 # 启动Tomcat服务器
 CMD ["catalina.sh", "run"]
