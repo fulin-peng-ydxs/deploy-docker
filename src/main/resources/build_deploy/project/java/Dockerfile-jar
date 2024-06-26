@@ -9,6 +9,10 @@ RUN echo 'Asia/Shanghai' >/etc/timezone
 ARG JAR_FILE
 ADD ${JAR_FILE} /usr/local/myapp/myapp.jar
 
+#添加宋体：用于宋体业务
+ARG CFG
+ADD ./config/fonts /usr/share/fonts/chinese
+
 # 设置容器默认工作目录
 WORKDIR /usr/local/myapp
 
