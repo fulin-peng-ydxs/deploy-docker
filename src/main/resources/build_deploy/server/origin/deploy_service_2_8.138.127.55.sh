@@ -38,5 +38,12 @@ if [ $? -ne 0 ]; then
    exit 1
 fi
 
+echo "=====删除服务镜像包：$IMAGE_FILE======"
+rm -f $IMAGE_FILE
+
+if [ $? -ne 0 ]; then
+   exit 1
+fi
+
 echo "=====更新服务======"
 ssh $REMOTE_SERVER "cd $REMOTE_DIRECTORY && /usr/bin/docker load -i $IMAGE_FILE  && /usr/bin/docker  service update --force --image $IMAGE_NAME $SERVICE_NAME_REAL"
