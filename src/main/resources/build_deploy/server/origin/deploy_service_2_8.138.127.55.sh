@@ -46,4 +46,4 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "=====更新服务======"
-ssh $REMOTE_SERVER "cd $REMOTE_DIRECTORY && /usr/bin/docker load -i $IMAGE_FILE  && /usr/bin/docker  service update --force --image $IMAGE_NAME $SERVICE_NAME_REAL"
+ssh $REMOTE_SERVER "cd $REMOTE_DIRECTORY && /usr/bin/docker load -i $IMAGE_FILE  && /usr/bin/docker  service update --force --image $IMAGE_NAME $SERVICE_NAME_REAL && rm -f $IMAGE_FILE"
