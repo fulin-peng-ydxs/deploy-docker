@@ -9,6 +9,10 @@ RUN wget https://downloads.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apa
     && mv /usr/local/apache-tomcat-${TOMCAT_VERSION} /usr/local/tomcat \
     && rm /tmp/tomcat.tar.gz
 
+# 设置容器时间
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
+
 # 设置环境变量
 ENV CATALINA_HOME /usr/local/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH
