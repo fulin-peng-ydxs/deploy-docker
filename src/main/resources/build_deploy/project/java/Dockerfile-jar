@@ -5,13 +5,27 @@ FROM openjdk:8-jdk
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo 'Asia/Shanghai' >/etc/timezone
 
+#用于在 Linux 系统中设置时区的命令。具体来说，它会将系统的本地时间设置为上海时间（Asia/Shanghai 时区）。以下是这条命令的详细解释：
+#ln: 这是一个用于创建链接的命令。
+#-s: 这是 ln 命令的一个选项，表示创建一个符号链接（软链接），而不是硬链接。
+#-f: 这是 ln 命令的另一个选项，表示如果目标文件已经存在，强制删除它然后创建新的链接。
+#/usr/share/zoneinfo/Asia/Shanghai: 这是指向上海时区信息文件的路径。
+#/etc/localtime: 这是系统本地时间设置的文件位置。
+#这条命令的作用是将 /usr/share/zoneinfo/Asia/Shanghai 文件（代表上海时区）链接到 /etc/localtime，这样系统就会使用上海时区作为本地时间。
+
+#用于设置系统的时区信息，具体是将系统时区设置为上海时区（Asia/Shanghai）。以下是这条命令的详细解释：
+#echo 'Asia/Shanghai': 这是一个将字符串 Asia/Shanghai 输出到标准输出的命令。
+#>/etc/timezone: 这是一个重定向操作符，将 echo 命令的输出写入 /etc/timezone 文件中，覆盖文件中已有的内容。
+#这条命令的作用是将 Asia/Shanghai 写入到 /etc/timezone 文件中。/etc/timezone 文件通常用于存储系统的时区设置，很多 Linux 发行版和工具会读取这个文件来确定系统的时区。
+#这条命令和前面的 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 命令通常会一起使用，以确保系统的时区设置正确。前者设置了时区信息，后者实际更改了时区文件链接。
+
 # 上传jar
 ARG JAR_FILE
 ADD ${JAR_FILE} /usr/local/myapp/myapp.jar
 
 #添加宋体：用于宋体业务
 ARG CFG
-ADD ./config/fonts /usr/share/fonts/chinese
+ADD ${CFG}/fonts /usr/share/fonts/chinese
 
 # 设置容器默认工作目录
 WORKDIR /usr/local/myapp
