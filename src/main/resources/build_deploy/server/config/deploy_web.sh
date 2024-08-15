@@ -31,6 +31,13 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+## js修正
+./sh_config/web_js_sed.sh /root/gxts/deploy/config/gxtsweb/gxtsweb/js
+
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
 #构建镜像
 version=$(head -n 1 version.txt)
 image_repository=${2:-reg.int.it2000.com.cn}
