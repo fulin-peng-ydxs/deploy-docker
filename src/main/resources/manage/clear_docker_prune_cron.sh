@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #定时清除docker的垃圾数据：镜像、容器等
-(crontab -l 2>/dev/null; echo "0 2 * * * /usr/bin/docker system prune -af >> /var/log/docker-cleanup.log 2>&1") | crontab -
+(crontab -l 2>/dev/null; echo "0 2 * * * /usr/bin/docker system prune -af >> /var/log/clear_docker_prune_cron.log 2>&1") | crontab -
 
 #这个命令行可以分解为以下几个部分：
 #
