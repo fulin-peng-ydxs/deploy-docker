@@ -30,5 +30,8 @@ ADD ${CFG}/fonts /usr/share/fonts/chinese
 # 设置容器默认工作目录
 WORKDIR /usr/local/myapp
 
+# 声明变量：使用宿主机变量
+ENV JAVA_OPTS=$JAVA_OPTS
+
 # 设置容器启动执行的命令
-ENTRYPOINT ["java","-jar","/usr/local/myapp/myapp.jar"]
+ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar /usr/local/myapp.jar"]
