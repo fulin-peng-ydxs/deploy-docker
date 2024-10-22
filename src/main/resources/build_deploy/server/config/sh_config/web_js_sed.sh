@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 
 # Check if a directory path is provided as an argument
 if [ -z "$1" ]; then
