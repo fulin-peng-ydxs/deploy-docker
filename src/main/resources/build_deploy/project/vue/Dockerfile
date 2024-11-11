@@ -1,5 +1,6 @@
 # 设置基础镜像
 FROM nginx:1.24.0
+# 指定架构：FROM  --platform=linux/arm64 nginx:latest
 
 # 配置路由
 RUN sed  -i  '/location \/ {/a\        try_files $uri $uri\/ \/index\.html;'   /etc/nginx/conf.d/default.conf
