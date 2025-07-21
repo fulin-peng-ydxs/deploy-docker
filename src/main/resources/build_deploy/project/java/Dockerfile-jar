@@ -19,6 +19,23 @@ RUN echo 'Asia/Shanghai' >/etc/timezone
 #这条命令的作用是将 Asia/Shanghai 写入到 /etc/timezone 文件中。/etc/timezone 文件通常用于存储系统的时区设置，很多 Linux 发行版和工具会读取这个文件来确定系统的时区。
 #这条命令和前面的 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 命令通常会一起使用，以确保系统的时区设置正确。前者设置了时区信息，后者实际更改了时区文件链接。
 
+#JVM（Java）默认时区来源顺序（Linux 上）
+
+#JVM 启动时，如果没有显式设置 -Duser.timezone，会按照以下顺序尝试确定默认时区：
+#	1.	环境变量 TZ（某些 JVM 实现会参考，但并不稳定）
+#	2.	/etc/timezone 文件（某些 Linux 发行版存在此文件）
+#	3.	/etc/localtime 文件链接的目标文件
+#	4.	默认 UTC（以上都失败）
+
+#这两步：
+#	1.	设置了系统当前时区实际链接为 Asia/Shanghai；
+#	2.	设置了 /etc/timezone 明确指定 Asia/Shanghai；
+#
+#因此，在 JVM 启动时，它读取了这些配置文件，正确识别出了系统时区，从而自动设置 user.timezone=Asia/Shanghai，即便你没有手动指定
+
+
+
+
 # 上传jar
 ARG JAR_FILE
 ADD ${JAR_FILE} /usr/local/myapp/myapp.jar
